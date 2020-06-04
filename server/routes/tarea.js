@@ -12,7 +12,7 @@ app.get('/tarea', verificaToken, (req, res) => {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    let limite = req.query.limite || 5;
+    let limite = req.query.limite || 10;
     limite = Number(limite);
 
     Tarea.find({})

@@ -2,6 +2,7 @@
 require('./config/config');
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+// Conectar angular con el servidor
+app.use(cors());
 
 // Configuración global de rutas
 app.use(require('./routes/index'));
