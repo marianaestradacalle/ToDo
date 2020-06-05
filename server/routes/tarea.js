@@ -10,10 +10,8 @@ let app = express();
 
 app.get('/tarea', verificaToken, (req, res) => {
 
+    let hoy = moment(new Date()).format('YYYY-MM-DD').split('-');
     const id = req.usuario._id;
-    let hoy = moment([2020, 05, 04]);
-
-
 
     // Paginacion de tareas
     let desde = req.query.desde || 0;
@@ -35,15 +33,12 @@ app.get('/tarea', verificaToken, (req, res) => {
                 });
             }
 
-            tareas.forEach((tarea) => {
-                let fechaV = moment([2020, 05, 10]);
-                console.log(fechaV);
-                console.log(hoy);
+            tareas.map((tarea) => {
+                let fechaV = moment(tarea.fechaV).format('YYYY-MM-DD').split('-');
+                fechaV = moment(fechaV);
 
-
-                if (hoy.diff(fechaV, 'days')) {
-                    console.log('Se va a vencer la tarea', fechaV.diff(hoy, 'days'));
-                }
+                tarea.proxV = fechaV.diff(hoy, 'days') <= 1;
+                return tarea;
             });
 
             // Conteo de tareas
@@ -93,7 +88,7 @@ app.post('/tarea', verificaToken, (req, res) => {
         usuario: req.usuario._id,
         nombre: body.nombre,
         prioridad: body.prioridad,
-        fechaV: moment(body.fechaV).format('DD-MM-YYYY')
+        fechaV: moment(body.fechaV).format('YYYY-MM-DD')
     });
 
     tarea.save((err, tareaDB) => {

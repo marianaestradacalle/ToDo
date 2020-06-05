@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const moment = require('moment');
 
 let estadosValidos = {
     values: ['1. Completado', '2. Pendiente', '3. En progreso', '4. Vencido'],
@@ -28,6 +27,10 @@ let tareaSchema = new Schema({
         type: String,
         default: '2. Pendiente',
         enum: estadosValidos
+    },
+    proxV: {
+        type: Boolean,
+        required: false
     }
 });
 
