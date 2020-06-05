@@ -16,9 +16,8 @@ Es una aplicación que permite:
 
 
 También:
-  - Se encuentra desplegado en Heroku.
-  - Abierto al público en GitHub.
-  - 
+  - Se encuentra desplegado en [Heroku](https://my-todo-webserver.herokuapp.com/).
+  - Abierto al público en GitHub. 
 
 ### Instalación
 
