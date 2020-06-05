@@ -1,5 +1,5 @@
 // Archivo de configuracion
-require('./config/config');
+require('./server/config/config');
 
 const express = require('express');
 const cors = require('cors');
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Configuración global de rutas
-app.use(require('./routes/index'));
+app.use(require('./server/routes/index'));
 
 
 // Conectar a la BD
