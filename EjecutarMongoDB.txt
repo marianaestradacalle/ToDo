@@ -1,2 +1,0 @@
-Correr base de datos mongo: "C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" --dbpath="C:\Users\USER\Desktop\ToDo\data"
-Correr servidor de mongo: "C:\Program Files\MongoDB\Server\4.2\bin\mongo.exe" 
