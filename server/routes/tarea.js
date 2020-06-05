@@ -1,12 +1,19 @@
 const express = require('express');
 const _ = require('underscore');
 const verificaToken = require('../middlewares/autenticacion');
+const moment = require('moment');
+const { ObjectId } = require('mongoose').Types;
 
 let Tarea = require('../models/tarea');
 
 let app = express();
 
 app.get('/tarea', verificaToken, (req, res) => {
+
+    const id = req.usuario._id;
+    let hoy = moment([2020, 05, 04]);
+
+
 
     // Paginacion de tareas
     let desde = req.query.desde || 0;
@@ -15,7 +22,7 @@ app.get('/tarea', verificaToken, (req, res) => {
     let limite = req.query.limite || 10;
     limite = Number(limite);
 
-    Tarea.find({})
+    Tarea.find({ 'usuario': new ObjectId(id) })
         .populate('usuario', 'nombre email')
         .skip(desde)
         .limit(limite)
@@ -28,6 +35,17 @@ app.get('/tarea', verificaToken, (req, res) => {
                 });
             }
 
+            tareas.forEach((tarea) => {
+                let fechaV = moment([2020, 05, 10]);
+                console.log(fechaV);
+                console.log(hoy);
+
+
+                if (hoy.diff(fechaV, 'days')) {
+                    console.log('Se va a vencer la tarea', fechaV.diff(hoy, 'days'));
+                }
+            });
+
             // Conteo de tareas
             Tarea.count({}, (err, conteo) => {
                 res.json({
@@ -36,18 +54,46 @@ app.get('/tarea', verificaToken, (req, res) => {
                     registros: conteo
                 });
             });
+
         });
+
+});
+
+app.get('/tarea/:id', verificaToken, (req, res) => {
+    let id = req.params.id;
+
+    Tarea.findById(id, (err, tareaDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!tareaDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El ID no es correcto'
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            tarea: tareaDB
+        });
+    });
 });
 
 app.post('/tarea', verificaToken, (req, res) => {
 
     let body = req.body;
-
     let tarea = new Tarea({
         usuario: req.usuario._id,
         nombre: body.nombre,
         prioridad: body.prioridad,
-        fechaV: body.fechaV
+        fechaV: moment(body.fechaV).format('DD-MM-YYYY')
     });
 
     tarea.save((err, tareaDB) => {
@@ -65,6 +111,7 @@ app.post('/tarea', verificaToken, (req, res) => {
     });
 
 });
+
 
 app.put('/tarea/:id', verificaToken, (req, res) => {
 
